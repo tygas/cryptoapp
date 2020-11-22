@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <li class="cryptoitem">
-      <div class="cryptoitem__feature logo">
+  <tr class="cryptoitem">
+    <td class="cryptoitem__feature" width="50">
+      <div class="logo">
         <img
           class="coin-face"
           :src="
@@ -11,36 +11,36 @@
           "
         />
       </div>
-      <div class="cryptoitem__feature name">{{ cryptoItem.name }}</div>
+    </td>
+    <td class="cryptoitem__feature name">{{ cryptoItem.name }}</td>
 
-      <div class="cryptoitem__feature price unnecessary volume">
-        {{ parsePrice(cryptoItem.quote[currency].price) }}
-      </div>
-      <div class="cryptoitem__feature unnecessary volume">
-        <span>{{
-          parsePrice(shortenLargeNumber(cryptoItem.quote[currency].volume_24h))
-        }}</span>
-      </div>
+    <td class="cryptoitem__feature price unnecessary volume">
+      {{ parsePrice(cryptoItem.quote[currency].price) }}
+    </td>
+    <td class="cryptoitem__feature unnecessary volume">
+      <span>{{
+        parsePrice(shortenLargeNumber(cryptoItem.quote[currency].volume_24h))
+      }}</span>
+    </td>
 
+    <td
+      class="cryptoitem__feature 24h last "
+      :class="isNegOrPos(cryptoItem.quote[currency].percent_change_24h)"
+    >
       <div
-        class="cryptoitem__feature 24h last "
-        :class="isNegOrPos(cryptoItem.quote[currency].percent_change_24h)"
+        :class="
+          Math.abs(cryptoItem.quote[currency].percent_change_24h) > 5
+            ? 'pulse'
+            : ''
+        "
       >
-        <div
-          :class="
-            Math.abs(cryptoItem.quote[currency].percent_change_24h) > 5
-              ? 'pulse'
-              : ''
-          "
-        >
-          {{ cryptoItem.quote[currency].percent_change_24h > 0 ? '+' : '' }}
-          {{ cryptoItem.quote[currency].percent_change_24h.toFixed(1) }}
+        {{ cryptoItem.quote[currency].percent_change_24h > 0 ? '+' : '' }}
+        {{ cryptoItem.quote[currency].percent_change_24h.toFixed(1) }}
 
-          <small>% </small>
-        </div>
+        <small>% </small>
       </div>
-    </li>
-  </div>
+    </td>
+  </tr>
 </template>
 
 <script>
@@ -69,15 +69,21 @@ export default {
 </script>
 
 <style scoped lang="scss">
+td {
+  padding: 5px 0;
+}
+
 .cryptoitem {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 15px;
-  border-bottom: 1px solid #ccc;
-  height: 30px;
-  width: 100%;
   align-items: center;
   background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  height: 30px;
+  padding: 8px 15px;
+
+  &:hover {
+    background: #f4f4f4;
+    color: #555;
+  }
 
   .logo {
     display: inline-block;
@@ -106,7 +112,7 @@ export default {
       left: 0;
       bottom: 0;
       border-radius: 50%;
-      width: 100%;
+      width: 30px;
       height: 100%;
 
       &:nth-child(1) {
@@ -128,8 +134,6 @@ export default {
   }
 
   &__feature {
-    width: 15%;
-
     &.volume {
       text-align: center;
     }
@@ -158,11 +162,12 @@ export default {
   min-width: 50px;
   padding-right: 5px;
 }
-
 .last {
   width: fit-content;
 }
-
+.name {
+  padding-left: 10px;
+}
 .name,
 .price {
   font-weight: bold;
@@ -173,15 +178,12 @@ export default {
 }
 
 .pos {
-  color: #00ff00;
+  color: rgb(2, 192, 118);
 }
 
 @media (max-width: 500px) {
   .unnecessary {
     display: none;
-  }
-  .cryptoitem__feature {
-    width: 33%;
   }
   .number {
     width: 5%;
