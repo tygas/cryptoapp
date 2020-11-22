@@ -3038,9 +3038,7 @@ const cryptoList = {
 }
 
 function fetchCryptoMock(start) {
-  const aa = cryptoList.data.slice(start * LIMIT, (start + 1) * LIMIT)
-  // console.log(aa, start, LIMIT)
-  return aa
+  return cryptoList.data.slice(start * LIMIT, (start + 1) * LIMIT)
 }
 
 export default fetchCryptoMock

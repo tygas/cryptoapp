@@ -49,7 +49,7 @@ export default {
     },
     loadMore() {
       this.page = this.page + 1
-      this.$store.dispatch('fetchMoreCrypto', {
+      this.$store.dispatch('fetchCrypto', {
         currency: this.currency,
         page: this.page,
       })

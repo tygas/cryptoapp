@@ -1,26 +1,38 @@
 <template>
   <div class="">
-    <ul class="listheader">
-      <li class="listheader__el first logo"></li>
-        <li class="listheader__el listheader__el--name" @click="filterByName()">Name</li>
-        <li class="listheader__el unnecessary" @click="filterByPrice()">
-          Price
-        </li>
-        <li class="listheader__el unnecessary" @click="filterByVolume()">
-          Volume
-        </li>
+    <table class="table">
+      <thead>
+        <tr class="listheader">
+          <th width="50" class="listheader__el first logo"></th>
+          <th
+            class="listheader__el listheader__el--name"
+            @click="filterByName()"
+          >
+            Name
+          </th>
+          <th class="listheader__el unnecessary" @click="filterByPrice()">
+            Price
+          </th>
+          <th class="listheader__el unnecessary" @click="filterByVolume()">
+            Volume
+          </th>
 
-        <li class="listheader__el last" @click="filterBy24h()">
-          <i class="fas fa-percent fa-xs"></i> 24h
-        </li>
-    </ul>
-    <CryptoListItem
-        v-for="[number, CryptoItem] in CryptoItems.entries()"
-        :key="CryptoItem.id"
-        :cryptoItem="CryptoItem"
-        :number="number"
-        :currency="currency"
-    />
+          <th class="listheader__el last" @click="filterBy24h()">
+            <i class="fas fa-percent fa-xs"></i> 24h
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <CryptoListItem
+          v-for="[number, CryptoItem] in CryptoItems.entries()"
+          :key="CryptoItem.id"
+          :cryptoItem="CryptoItem"
+          :number="number"
+          on
+          :currency="currency"
+        />
+      </tbody>
+    </table>
     <transition name="fade">
       <div v-if="loading" class="lds-dual-ring"></div>
     </transition>
@@ -77,9 +89,9 @@ export default {
     },
     filterByVolume() {
       this.CryptoItems = this.CryptoItems.sort(
-          (item1, item2) =>
-              item2.quote[this.currency].volume_24h -
-              item1.quote[this.currency].volume_24h,
+        (item1, item2) =>
+          item2.quote[this.currency].volume_24h -
+          item1.quote[this.currency].volume_24h,
       )
     },
 
@@ -107,21 +119,29 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.listheader {
-  display: flex;
+.table {
+  border-collapse: collapse;
   width: 100%;
-  list-style: none;
-  padding: 8px 15px;
+
+  thead {
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+  }
+  th {
+    background: #fff;
+    position: sticky;
+    animation: 3s linear 1s infinite alternate slidein;
+    top: 0; /* Don't forget this, required for the stickiness */
+    z-index: 1;
+  }
+}
+.listheader {
   border-bottom: 1px solid #ccc;
+  list-style: none;
   margin: 0;
-  height: fit-content;
-  justify-content: space-between;
-
-
+  padding: 8px 15px;
+  width: 100%;
 
   &__el {
-    width: 15%;
-    height: fit-content;
     font-weight: bold;
     text-align: center;
     font-size: 20px;
@@ -129,11 +149,12 @@ export default {
     padding: 10px;
     cursor: pointer;
 
-
     &:hover {
-      background-color: #eee;
       color: #999;
 
+      span {
+        display: block;
+      }
     }
 
     &.first {
@@ -145,8 +166,6 @@ export default {
       width: fit-content;
     }
   }
-
-
 }
 
 .lds-dual-ring {
@@ -157,14 +176,15 @@ export default {
 }
 
 .lds-dual-ring:after {
-  content: ' ';
+  content: '  🚀 ';
   display: block;
-  width: 64px;
-  height: 64px;
+  width: 40px;
+  height: 40px;
   margin: 8px;
+  padding: 3px;
   border-radius: 50%;
-  border: 6px solid #1153fc;
-  border-color: #1153fc transparent #1153fc transparent;
+  border: 4px solid #eee;
+  border-color: #eee transparent #eee transparent;
   animation: lds-dual-ring 1.2s linear infinite;
 }
 
@@ -183,8 +203,6 @@ export default {
   }
 
   .listheader__el {
-    width: 70%;
-
     &.first {
       width: 30px;
     }
@@ -192,14 +210,9 @@ export default {
       min-width: 30%;
     }
   }
-
-
 }
-
 
 .lds-dual-ring {
   margin: 0 35%;
 }
-
-
 </style>
